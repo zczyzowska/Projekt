@@ -1,7 +1,9 @@
+#include "makespl.h"
+#include "piv_ge_solver.h"
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include "makespl.h"
 #include <stddef.h>
 
 typedef struct Matrix {
@@ -95,6 +97,7 @@ int  backsubst(Matrix *x, Matrix *AB) {
  }
 void make_spl(points_t*pts, spline_t *spl)
 {
+	matrix_t	*B = NULL;
 	Matrix     *B=NULL; //macierz rozszerzona do gausa
 	Matrix	   *z=NULL;
 	Matrix     *fprim = NULL;
@@ -113,11 +116,11 @@ void make_spl(points_t*pts, spline_t *spl)
 	      for (j=0;j<nb;j++)
 	          X[i] = X[i] +pow(x[j],i);
 	}
-	B = createMatrix( 5, 6);
+	B = make_matrix( 5, 6);
 	for (i=0;i<=4; i++)
 	{
 	      for (j=0;j<=4;j++)
-	      B->data[i][j] = X[i+j];
+	      	B->e[i*B->cn+j] = X[i+j];
 	}
 	for (i=0;i<=4;i++)
 	{   Y[i]=0;
@@ -126,15 +129,19 @@ void make_spl(points_t*pts, spline_t *spl)
 	    }
 	}
 	for (i=0; i<=4;i++)
-	    B->data[i][5] = Y[i];
-	//printf("Macierz rozszerzona:\n");   
-	//printToScreen(B);
-	            
-	res = eliminate(B);
-	z = createMatrix(B->r, 1);
-	res = backsubst(z,B);
-	//printf("Rozwiązanie równania (współczynniki):\n");
-	//printToScreen(z);
+	    B->data[i*B->cn+5] = Y[i];
+	printf("Macierz rozszerzona:\n");   
+	write_matrix(B,stdout);
+	if (piv_ge_solver(B)) {
+		spl->n = 0;
+		return;
+	}            
+	//res = eliminate(B);
+	//z = createMatrix(B->r, 1);
+	//res = backsubst(z,B);
+	printf("Rozwiązanie równania (współczynniki):\n");
+	write_matrix(B,stdout);
+	
 	fprim = createMatrix(4,1);
 	fprim2 = createMatrix(3,1);
 	fprim3 = createMatrix(2,1);
@@ -172,8 +179,8 @@ void make_spl(points_t*pts, spline_t *spl)
 		}
 	}
 
-	freeMatrix(B);
-	freeMatrix(z);
+	free_matrix(B);
+	
 	
 
 }
