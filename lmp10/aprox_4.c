@@ -98,8 +98,8 @@ int  backsubst(Matrix *x, Matrix *AB) {
 void make_spl(points_t*pts, spline_t *spl)
 {
 	matrix_t	*B = NULL;
-	Matrix     *B=NULL; //macierz rozszerzona do gausa
-	Matrix	   *z=NULL;
+	//Matrix     *B=NULL; //macierz rozszerzona do gausa
+	//Matrix	   *z=NULL;
 	Matrix     *fprim = NULL;
 	Matrix     *fprim2 = NULL;
 	Matrix     *fprim3 = NULL;
