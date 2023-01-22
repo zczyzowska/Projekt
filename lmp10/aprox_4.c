@@ -146,7 +146,7 @@ void make_spl(points_t*pts, spline_t *spl)
 	fprim2 = make_matrix(3,1);
 	fprim3 = make_matrix(2,1);
 	for (i=1;i<5;i++)
-		fprim->e[i-1] = B->e[i]*i;
+		fprim->e[i-1] = B->e[i*6]*i;
 	for (i=1;i<4;i++)
 		fprim2->e[i-1] = fprim->e[i]*i;
 	for (i=1;i<3;i++)
@@ -156,7 +156,7 @@ void make_spl(points_t*pts, spline_t *spl)
 			spl->x[i] = pts->x[i];
 			double sum=0;
 			for (j=0;j<5;j++)
-				sum+=B->e[j]*pow(x[i], j);
+				sum+=B->e[j*6]*pow(x[i], j);
 			spl->f[i] = sum;
 		}
 		for (i=0;i<nb;i++) {
