@@ -7,16 +7,16 @@ intrp: main.o splines.o points.o interpolator.o gaus/libge.a
 prosta: main.o splines.o points.o prosta.o
 	$(CC) -o prosta  main.o splines.o points.o prosta.o
 
-aprox4: main.o splines.o points.o aprox_4.o
-	$(CC) -o aprox4 main.o splines.o points.o aprox_4.o -lm
+aprox4: main.o splines.o points.o aprox_4.o gaus/libge.a
+	$(CC) -o aprox4 main.o splines.o points.o aprox_4.o -L gaus -l ge -lm
 
 aproksymator_na_bazie.o: makespl.h points.h gaus/piv_ge_solver.h
 	$(CC) -I gaus -c aproksymator_na_bazie.c
 
 interpolator.o: makespl.h points.h gaus/piv_ge_solver.h
 	$(CC) -I gaus -c interpolator.c
-aprox_4.o: makespl.h points.h
-	$(CC) -c aprox_4.c
+aprox_4.o: makespl.h points.h gaus/piv_ge_solver.h
+	$(CC) -I gaus -c aprox_4.c
 
 .PHONY: clean
 
