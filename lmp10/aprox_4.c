@@ -179,10 +179,10 @@ void make_spl(points_t*pts, spline_t *spl)
 		}
 	}
 
-	free_matrix(B);
-	free_matrix(fprim);
-	free_matrix(fprim2);
-	free_matrix(fprim3);
+	//free_matrix(B);
+	//free_matrix(fprim);
+	//free_matrix(fprim2);
+	//free_matrix(fprim3);
 	
 	
 
