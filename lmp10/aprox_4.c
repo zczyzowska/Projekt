@@ -100,9 +100,9 @@ void make_spl(points_t*pts, spline_t *spl)
 	matrix_t	*B = NULL;
 	//Matrix     *B=NULL; //macierz rozszerzona do gausa
 	//Matrix	   *z=NULL;
-	Matrix     *fprim = NULL;
-	Matrix     *fprim2 = NULL;
-	Matrix     *fprim3 = NULL;
+	matrix_t     *fprim = NULL;
+	matrix_t     *fprim2 = NULL;
+	matrix_t     *fprim3 = NULL;
 	double      *x = pts->x;
 	double      *y = pts->y;
 	double      X[9];
@@ -129,7 +129,7 @@ void make_spl(points_t*pts, spline_t *spl)
 	    }
 	}
 	for (i=0; i<=4;i++)
-	    B->data[i*B->cn+5] = Y[i];
+	    B->e[i*B->cn+5] = Y[i];
 	printf("Macierz rozszerzona:\n");   
 	write_matrix(B,stdout);
 	if (piv_ge_solver(B)) {
@@ -142,44 +142,47 @@ void make_spl(points_t*pts, spline_t *spl)
 	printf("Rozwiązanie równania (współczynniki):\n");
 	write_matrix(B,stdout);
 	
-	fprim = createMatrix(4,1);
-	fprim2 = createMatrix(3,1);
-	fprim3 = createMatrix(2,1);
+	fprim = make_matrix(4,1);
+	fprim2 = make_matrix(3,1);
+	fprim3 = make_matrix(2,1);
 	for (i=1;i<5;i++)
-		fprim->data[i-1][0] = z ->data[i][0]*i;
+		fprim->e[i-1] = B->e[i]*i;
 	for (i=1;i<4;i++)
-		fprim2->data[i-1][0] = fprim->data[i][0]*i;
+		fprim2->e[i-1] = fprim->e[i]*i;
 	for (i=1;i<3;i++)
-		fprim3->data[i-1][0] = fprim2->data[i][0]*i;
+		fprim3->e[i-1] = fprim2->e[i]*i;
 	if (alloc_spl(spl,nb) == 0) {
 		for(i=0;i<nb;i++) {
 			spl->x[i] = pts->x[i];
 			double sum=0;
 			for (j=0;j<5;j++)
-				sum+=z->data[j][0]*pow(x[i], j);
+				sum+=B->e[j]*pow(x[i], j);
 			spl->f[i] = sum;
 		}
 		for (i=0;i<nb;i++) {
 			double sum=0;
 			for (j=0;j<4;j++)
-				sum+=fprim->data[j][0]*pow(x[i], j);
+				sum+=fprim->e[j]*pow(x[i], j);
 			spl->f1[i] = sum;
 		}
 		for (i=0;i<nb;i++) {
 			double sum=0;
 			for (j=0;j<3;j++)
-				sum += fprim2->data[j][0]*pow(x[i],j);
+				sum += fprim2->e[j]*pow(x[i],j);
 			spl->f2[i] = sum;
 		}
 		for (i=0; i<nb; i++) {
 			double sum=0;
 			for (j=0;j<2;j++)
-				sum += fprim3->data[j][0]*pow(x[i],j);
+				sum += fprim3->e[j]*pow(x[i],j);
 			spl->f3[i] = sum;
 		}
 	}
 
 	free_matrix(B);
+	free_matrix(fprim);
+	free_matrix(fprim2);
+	free_matrix(fprim3);
 	
 	
 
