@@ -8,8 +8,6 @@
 void make_spl(points_t*pts, spline_t *spl)
 {
 	matrix_t	*B = NULL;
-	//Matrix     *B=NULL; //macierz rozszerzona do gausa
-	//Matrix	   *z=NULL;
 	matrix_t     *fprim = NULL;
 	matrix_t     *fprim2 = NULL;
 	matrix_t     *fprim3 = NULL;
@@ -48,7 +46,7 @@ void make_spl(points_t*pts, spline_t *spl)
 	if (piv_ge_solver(B)) {
 		spl->n = 0;
 		return;
-	}            
+	}
 	#if DEBUG
 	printf("Rozwiązanie równania (współczynniki):\n");
 	write_matrix(B,stdout);
@@ -94,11 +92,9 @@ void make_spl(points_t*pts, spline_t *spl)
 		}
 	}
 
-	//free_matrix(B);
-	//free_matrix(fprim);
-	//free_matrix(fprim2);
-	//free_matrix(fprim3);
-	
-	
+	free_matrix(B);
+	free_matrix(fprim);
+	free_matrix(fprim2);
+	free_matrix(fprim3);
 
 }

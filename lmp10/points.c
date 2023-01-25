@@ -46,3 +46,9 @@ read_pts_failed (FILE * inf, points_t * pts)
 
   return 0;
 }
+void
+free_points(points_t *pts)
+{
+  free (pts->x);
+  free (pts->y);
+}
