@@ -70,7 +70,7 @@ void make_spl(points_t*pts, spline_t *spl)
 			for (j=1;j<5;j++) {
 				sum+=B->e[((j+1)*5)+m]*pow(x[i], j);
 				m++;
-		}spl->f[i] = sum;
+		}	spl->f[i] = sum;
 		}
 		for (i=0;i<nb;i++) {
 			double sum=0;
